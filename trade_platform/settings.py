@@ -30,6 +30,12 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'djoser',
+
+    # Apps
+    'trade',
+    'offer',
+    'stock_container',
+    'stock_management',
 ]
 
 MIDDLEWARE = [
