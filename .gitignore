@@ -1,3 +1,4 @@
 trade_platform/.env
 db.sqlite3
 .idea/
+__pycache__
