@@ -12,7 +12,7 @@ class PriceSerializer(serializers.ModelSerializer):
         fields = ['value', 'currency', 'date_of_change']
 
 
-class StockSerializer(serializers.ModelSerializer):
+class StockSerializer(serializers.HyperlinkedModelSerializer):
     price = PriceSerializer()
 
     class Meta:

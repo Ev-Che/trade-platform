@@ -1,7 +1,7 @@
 from .models import Stock, Price
 
 
-class DBQuery:
+class StockDBManager:
 
     @staticmethod
     def get_all_stocks():

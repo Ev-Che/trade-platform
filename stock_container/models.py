@@ -6,23 +6,27 @@ from stock_management.models import Stock
 User = get_user_model()
 
 
-class Favorites(models.Model):
+class Favorite(models.Model):
     """User favorites stocks"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    favorites_stocks = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    favorite_stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = [['user', 'favorites_stocks']]
+        unique_together = ('user', 'favorite_stock',)
 
     def __str__(self):
-        return f'{self.user.name} {self.__class__.__name__}'
+        return f'{self.user.username} {self.__class__.__name__}'
 
 
 class Inventory(models.Model):
     """User stocks"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    stocks = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
+    class Meta:
+        verbose_name = 'Inventory'
+        verbose_name_plural = 'Inventories'
+
     def __str__(self):
-        return f'{self.user.name} {self.__class__.__name__}'
+        return f'{self.user.username} {self.__class__.__name__}'

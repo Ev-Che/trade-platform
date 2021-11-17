@@ -8,4 +8,5 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
 
     path('', include('stock_management.urls')),
+    path('', include('stock_container.urls')),
 ]
