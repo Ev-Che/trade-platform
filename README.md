@@ -7,6 +7,10 @@
     <li>/stocks/id/ - (GET) retrieve stock with id</li>
     <br>
     <li>/favorites/ - (GET) get user favorites</li>
+    <li>/favorites/ - (POST)<br>
+data: {user: user_id, favorive_stock: stock_id}<br>
+add stock with stock_id to user favorives</li>
+    <li>/favorites/id/ - (DELETE) delete favorite</li>
     <br>
     <li>/inventory/ - (GET) get user inventory</li>
 </ul>

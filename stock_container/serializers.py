@@ -1,16 +1,23 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from .models import Favorite, Inventory
 
 
-class FavoritesSerializer(serializers.HyperlinkedModelSerializer):
+class FavoritesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Favorite
-        fields = ['id', 'favorite_stock']
+        fields = ['id', 'user', 'favorite_stock']
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Favorite.objects.all(),
+                fields=['user', 'favorite_stock']
+            )
+        ]
 
 
-class InventorySerializer(serializers.HyperlinkedModelSerializer):
+class InventorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inventory
         fields = ['id', 'stock', 'quantity']
