@@ -11,6 +11,7 @@ djoser = "*"
 psycopg2-binary = "*"
 django-environ = "*"
 pytest = "*"
+django-extensions = "*"
 
 [dev-packages]
 
