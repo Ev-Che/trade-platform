@@ -6,7 +6,8 @@ urlpatterns = [
     # JWT Auth
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
-
+    # Apps
     path('', include('stock_management.urls')),
     path('', include('stock_container.urls')),
+    path('', include('offer.urls')),
 ]
