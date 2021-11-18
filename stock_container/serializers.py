@@ -18,6 +18,7 @@ class FavoritesSerializer(serializers.ModelSerializer):
 
 
 class InventorySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Inventory
         fields = ['id', 'stock', 'quantity']
