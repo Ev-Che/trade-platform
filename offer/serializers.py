@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from .models import Offer, SELL, WRONG_STOCK_MESSAGE
-from .services import is_inventory_exists
+from .models import Offer
+from .validators import OfferValidator
 
 
 class OfferSerializer(serializers.ModelSerializer):
@@ -11,13 +11,9 @@ class OfferSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, attrs):
-        """check that the stock selected for sale exists in the inventory
-        and the quantity indicated for sale is less than that in the
-        inventory"""
-
-        if attrs['order_type'] == SELL:
-            if not is_inventory_exists(attrs['user'], attrs['stock'],
-                                       attrs['entry_quantity']):
-                raise serializers.ValidationError(WRONG_STOCK_MESSAGE)
+        validator = OfferValidator(order_type=attrs['order_type'],
+                                   user=attrs['user'], stock=attrs['stock'],
+                                   entry_quantity=attrs['entry_quantity'])
+        validator.validate()
 
         return attrs
