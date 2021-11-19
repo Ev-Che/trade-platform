@@ -4,16 +4,13 @@ from .models import Stock, Currency, Price
 
 
 class PriceSerializer(serializers.ModelSerializer):
-    currency = serializers.PrimaryKeyRelatedField(read_only=True,
-                                                  source='currency.code')
 
     class Meta:
         model = Price
-        fields = ['value', 'currency', 'date_of_change']
+        fields = '__all__'
 
 
 class StockSerializer(serializers.ModelSerializer):
-    price = PriceSerializer()
 
     class Meta:
         model = Stock
@@ -21,6 +18,7 @@ class StockSerializer(serializers.ModelSerializer):
 
 
 class CurrencySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Currency
         fields = '__all__'
