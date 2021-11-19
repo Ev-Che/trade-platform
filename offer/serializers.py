@@ -9,11 +9,4 @@ class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Offer
         fields = '__all__'
-
-    def validate(self, attrs):
-        validator = OfferValidator(order_type=attrs['order_type'],
-                                   user=attrs['user'], stock=attrs['stock'],
-                                   entry_quantity=attrs['entry_quantity'])
-        validator.validate()
-
-        return attrs
+        validators = [OfferValidator()]

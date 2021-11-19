@@ -8,11 +8,14 @@ WRONG_STOCK_MESSAGE = ('there is no such stock in the inventory '
 
 
 class OfferValidator:
-    def __init__(self, order_type, user, stock, entry_quantity):
-        self.order_type = order_type
-        self.user = user
-        self.stock = stock
-        self.entry_quantity = entry_quantity
+
+    def __call__(self, value):
+        self.order_type = value.get('order_type')
+        self.user = value.get('user')
+        self.stock = value.get('stock')
+        self.entry_quantity = value.get('entry_quantity')
+
+        self.validate()
 
     def _validate_selected_for_sale_stock(self):
         """Check that the stock selected for sale exists in the inventory
