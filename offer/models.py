@@ -25,3 +25,6 @@ class Offer(models.Model):
 
     def __str__(self):
         return f'{self.__class__.__name__}({self.stock.code})'
+
+    def get_avg_price(self):
+        return self.price / self.entry_quantity
