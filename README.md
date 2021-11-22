@@ -23,4 +23,6 @@ add stock with stock_id to user favorives</li>
     <li>/offers/ - (GET) get all offers</li>
     <li>/offers/ - (POST) data:{'stock': id, 'entry_quantity': quantity, 'order_type': 'S' or 'B', }<br>
 get all offers</li>
+    <br>
+    <li>/trades/ - (GET) get get trades for user where he is seller or buyer.</li>
 </ul>

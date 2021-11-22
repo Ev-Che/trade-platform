@@ -5,7 +5,7 @@ from .models import Trade
 from .serializer import TradeSerializer
 
 
-class TradeViewSet(viewsets.ModelViewSet):
+class TradeViewSet(viewsets.ReadOnlyModelViewSet):
 
     serializer_class = TradeSerializer
 
