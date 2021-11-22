@@ -1,7 +1,8 @@
-from django.urls import path
+from rest_framework import routers
 
-from trade.views import TradeView
+from trade.views import TradeViewSet
 
-urlpatterns = [
-    path('trades/', TradeView.as_view()),
-]
+router = routers.SimpleRouter()
+router.register('trades', TradeViewSet, basename='trades')
+
+urlpatterns = router.urls

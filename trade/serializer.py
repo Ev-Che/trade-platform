@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from offer.models import Offer
+from .models import Trade
 
 
-class OfferSerializer(serializers.ModelSerializer):
+class TradeSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Offer
+        model = Trade
         fields = '__all__'

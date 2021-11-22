@@ -1,10 +1,15 @@
-from rest_framework import views
-from rest_framework.response import Response
+from django.db.models import Q
+from rest_framework import viewsets
 
-from .services.trade_service import Trader
+from .models import Trade
+from .serializer import TradeSerializer
 
 
-class TradeView(views.APIView):
-    def get(self, request):
-        Trader().make_a_trade()
-        return Response({'status': 'ok'})
+class TradeViewSet(viewsets.ModelViewSet):
+
+    serializer_class = TradeSerializer
+
+    def get_queryset(self):
+        return Trade.objects.filter(Q(seller=self.request.user) |
+                                    Q(buyer=self.request.user))
+

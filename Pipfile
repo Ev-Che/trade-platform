@@ -11,6 +11,8 @@ djoser = "*"
 psycopg2-binary = "*"
 django-environ = "*"
 pytest = "*"
+celery = "*"
+redis = "*"
 
 [dev-packages]
 
