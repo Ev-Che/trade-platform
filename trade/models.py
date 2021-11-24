@@ -15,7 +15,7 @@ class Trade(models.Model):
     buyer = models.ForeignKey(User, on_delete=models.CASCADE,
                               related_name='buyer_trade',
                               related_query_name='buyer_trade')
-    quantity = models.IntegerField()
+    quantity = models.PositiveIntegerField()
     unit_price = models.DecimalField(max_digits=7, decimal_places=2)
     description = models.TextField(blank=True, null=True)
     seller_offer = models.ForeignKey(Offer, on_delete=models.CASCADE,
