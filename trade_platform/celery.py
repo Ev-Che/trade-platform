@@ -7,10 +7,4 @@ app = Celery('trade_tasks')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
-app.conf.beat_schedule = {
-    'trade-every-30-seconds': {
-        'task': 'trade.tasks.make_a_trade_task',
-        'schedule': 30.0,
-    },
-}
 app.conf.timezone = 'UTC'

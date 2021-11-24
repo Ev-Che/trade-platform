@@ -11,7 +11,7 @@ djoser = "*"
 psycopg2-binary = "*"
 django-environ = "*"
 pytest = "*"
-celery = "*"
+celery = "==4.4.7"
 redis = "*"
 
 [dev-packages]

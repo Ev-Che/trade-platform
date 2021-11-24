@@ -20,7 +20,7 @@ class Favorite(models.Model):
 
 class Inventory(models.Model):
     """User stocks"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 

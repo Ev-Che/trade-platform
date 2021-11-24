@@ -1,9 +1,15 @@
+from datetime import timedelta
+
+from celery.task import periodic_task
+from celery.utils.log import get_task_logger
+
 from trade.services.trade_service import Trader
-from trade_platform.celery import app
+
+logger = get_task_logger(__name__)
 
 
-@app.task
+@periodic_task(run_every=timedelta(minutes=0.5))
 def make_a_trade_task():
-    print('Start task')
+    logger.info('Start task')
     Trader().make_a_trade()
-    print('Finish task')
+    logger.info('Finish task')
