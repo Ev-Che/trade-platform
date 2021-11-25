@@ -8,9 +8,11 @@ from . import serializers
 class MultiSerializerWithPermissionViewSet(viewsets.ModelViewSet):
 
     permissions = {
-        'list': (IsAuthenticated,),
-        'retrieve': (IsAuthenticated,),
-        'default': (IsAdminUser,),
+        'create': (IsAdminUser,),
+        'update': (IsAdminUser,),
+        'partial_update': (IsAdminUser,),
+        'destroy': (IsAdminUser,),
+        'default': (),
     }
 
     serializers = {

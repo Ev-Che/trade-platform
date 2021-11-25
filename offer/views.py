@@ -21,7 +21,7 @@ class OfferViewSet(viewsets.ModelViewSet):
     permissions = {
         'update': (IsOwner,),
         'partial_update': (IsOwner,),
-        'delete': (IsOwner,),
+        'destroy': (IsOwner,),
         'default': (IsAuthenticated,)
     }
 
