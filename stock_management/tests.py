@@ -12,7 +12,7 @@ from stock_management.views import StockViewSet, CurrencyViewSet, PriceViewSet
 User = get_user_model()
 
 
-class StockViewSetTestCase(APITestCase):
+class BaseSetUpClass(APITestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -23,6 +23,14 @@ class StockViewSetTestCase(APITestCase):
         cls.admin = User.objects.create_superuser(username='admin',
                                                   password='admin')
         cls.jwt_token = cls.factory.get(jwt_url)
+
+
+class StockViewSetTestCase(BaseSetUpClass):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
         currency = Currency.objects.create(code='USD', name='US Dollar')
         price = Price.objects.create(currency=currency, value=500,
                                      date_of_change=datetime.datetime.now())
@@ -112,17 +120,11 @@ class StockViewSetTestCase(APITestCase):
                          status.HTTP_204_NO_CONTENT)
 
 
-class CurrencyViewSetTestCase(APITestCase):
+class CurrencyViewSetTestCase(BaseSetUpClass):
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.factory = APIRequestFactory()
-        jwt_url = reverse('jwt-create')
-        cls.user = User.objects.create_user(username='test', password='test')
-        cls.admin = User.objects.create_superuser(username='admin',
-                                                  password='admin')
-        cls.jwt_token = cls.factory.get(jwt_url)
         cls.currency = Currency.objects.create(code='USD', name='US Dollar')
 
     def test_get_currencies_list(self):
@@ -209,17 +211,11 @@ class CurrencyViewSetTestCase(APITestCase):
                          status.HTTP_204_NO_CONTENT)
 
 
-class PriceViewSetTestCase(APITestCase):
+class PriceViewSetTestCase(BaseSetUpClass):
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.factory = APIRequestFactory()
-        jwt_url = reverse('jwt-create')
-        cls.user = User.objects.create_user(username='test', password='test')
-        cls.admin = User.objects.create_superuser(username='admin',
-                                                  password='admin')
-        cls.jwt_token = cls.factory.get(jwt_url)
         currency = Currency.objects.create(code='USD', name='US Dollar')
         cls.price = Price.objects.create(
             currency=currency, value=500,
@@ -245,7 +241,7 @@ class PriceViewSetTestCase(APITestCase):
 
     def test_get_list_not_auth_user(self):
         url = reverse('currencies-list')
-        view = CurrencyViewSet.as_view({'get': 'list'})
+        view = PriceViewSet.as_view({'get': 'list'})
         request = self.factory.get(url)
         response = view(request)
 

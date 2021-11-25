@@ -12,7 +12,7 @@ class MultiSerializerWithPermissionViewSet(viewsets.ModelViewSet):
         'update': (IsAdminUser,),
         'partial_update': (IsAdminUser,),
         'destroy': (IsAdminUser,),
-        'default': (),
+        'default': (IsAuthenticated,),
     }
 
     serializers = {
