@@ -9,17 +9,17 @@ User = get_user_model()
 BUY = 'B'
 SELL = 'S'
 
-ORDER_TYPE_CHOICES = [
-    (BUY, 'Buy'),
-    (SELL, 'Sell'),
-]
-
 
 class Offer(models.Model):
+    class OrderTypeChoices(models.TextChoices):
+        buy = BUY, 'Buy'
+        sell = SELL, 'Sell'
+
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     entry_quantity = models.PositiveIntegerField('Entry quantity')
-    order_type = models.CharField(max_length=1, choices=ORDER_TYPE_CHOICES)
+    order_type = models.CharField(max_length=1,
+                                  choices=OrderTypeChoices.choices)
     price = models.DecimalField('Price', max_digits=7, decimal_places=2)
     is_active = models.BooleanField('Is active', default=True)
 

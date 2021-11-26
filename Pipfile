@@ -13,6 +13,7 @@ django-environ = "*"
 pytest = "*"
 celery = "==4.4.7"
 redis = "*"
+loguru = "*"
 
 [dev-packages]
 

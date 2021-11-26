@@ -7,8 +7,6 @@ from . import serializers
 
 
 class OfferViewSet(viewsets.ModelViewSet):
-    queryset = Offer.objects.all().select_related('stock', 'user')
-
     serializers = {
         'list': serializers.ListOfferSerializer,
         'retrieve': serializers.DetailOfferSerializer,
@@ -33,3 +31,12 @@ class OfferViewSet(viewsets.ModelViewSet):
         permission_classes = self.permissions.get(self.action,
                                                   self.permissions['default'])
         return [permission() for permission in permission_classes]
+
+    def get_queryset(self):
+        queries = {
+            'list': Offer.objects.all().select_related('stock', 'user'),
+            'retrieve': Offer.objects.all().select_related('stock', 'user'),
+            'default': Offer.objects.all()
+        }
+
+        return queries.get(self.action, queries['default'])

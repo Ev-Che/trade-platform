@@ -8,6 +8,7 @@ from stock_container.models import Inventory
 from stock_management.models import Stock
 from ..models import Trade
 from .profitable_offers_finder_service import ProfitableOffersFinder
+from loguru import logger
 
 User = get_user_model()
 
@@ -18,12 +19,12 @@ class Trader:
         """Creates Trades."""
 
         buy_offer = self._get_random_buy_offer()
-        print(f'buy offer: {buy_offer}')
+        logger.debug(f'buy offer: {buy_offer}')
 
         if buy_offer is not None:
             finder = ProfitableOffersFinder(buy_offer=buy_offer)
             most_profitable = finder.find_the_most_profitable()
-            print(f'Most profitable: {most_profitable}')
+            logger.debug(f'Most profitable: {most_profitable}')
 
             for sell_offer in most_profitable:
                 self._deal(buy_offer=buy_offer, sell_offer=sell_offer)

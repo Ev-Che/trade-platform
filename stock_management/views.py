@@ -6,7 +6,6 @@ from . import serializers
 
 
 class MultiSerializerWithPermissionViewSet(viewsets.ModelViewSet):
-
     permissions = {
         'create': (IsAdminUser,),
         'update': (IsAdminUser,),
@@ -30,7 +29,6 @@ class MultiSerializerWithPermissionViewSet(viewsets.ModelViewSet):
 
 
 class StockViewSet(MultiSerializerWithPermissionViewSet):
-    queryset = Stock.objects.all().select_related('price', 'price__currency')
 
     serializers = {
         'list': serializers.ListStockSerializer,
@@ -41,9 +39,18 @@ class StockViewSet(MultiSerializerWithPermissionViewSet):
         'default': serializers.BaseStockSerializer,
     }
 
+    def get_queryset(self):
+        queries = {
+            'list': Stock.objects.all().select_related(
+                'price', 'price__currency'),
+            'retrieve': Stock.objects.all().select_related(
+                'price', 'price__currency'),
+            'default': Stock.objects.all()
+        }
+        return queries.get(self.action, queries['default'])
+
 
 class PriceViewSet(MultiSerializerWithPermissionViewSet):
-    queryset = Price.objects.all().select_related('currency')
 
     serializers = {
         'list': serializers.ListPriceSerializer,
@@ -53,6 +60,14 @@ class PriceViewSet(MultiSerializerWithPermissionViewSet):
         'partial_update': serializers.CreateUpdatePriceSerializer,
         'default': serializers.BasePriceSerializer,
     }
+
+    def get_queryset(self):
+        queries = {
+            'list': Price.objects.all().select_related('currency'),
+            'retrieve': Price.objects.all().select_related('currency'),
+            'default': Price.objects.all()
+        }
+        return queries.get(self.action, queries['default'])
 
 
 class CurrencyViewSet(MultiSerializerWithPermissionViewSet):

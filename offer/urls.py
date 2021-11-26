@@ -4,5 +4,3 @@ from .views import OfferViewSet
 
 router = routers.SimpleRouter()
 router.register('', OfferViewSet, basename='offers')
-
-urlpatterns = router.urls

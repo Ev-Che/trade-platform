@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import SELL
-from .services import is_inventory_exists, are_there_enough_free_stocks
+from .services import SellOfferValidateManager
 
 WRONG_STOCK_MESSAGE = 'There is no such stock in the inventory.'
 WRONG_QUANTITY_ERROR_MESSAGE = 'There is not enough stocks in the inventory'
@@ -19,20 +19,23 @@ class OfferValidator:
 
     def validate(self):
         if self.order_type == SELL:
-            self._validate_existence()
-            self._validate_quantity()
+            validate_manager = SellOfferValidateManager(
+                user=self.user, stock=self.stock,
+                entry_quantity=self.entry_quantity)
+            self._validate_existence(validate_manager)
+            self._validate_quantity(validate_manager)
 
-    def _validate_existence(self):
+    @staticmethod
+    def _validate_existence(validate_manager: SellOfferValidateManager):
         """Check that the stock selected for sale exists in the inventory"""
 
-        if not is_inventory_exists(user=self.user, stock=self.stock):
+        if not validate_manager.is_inventory_exists():
             raise serializers.ValidationError(WRONG_STOCK_MESSAGE)
 
-    def _validate_quantity(self):
+    @staticmethod
+    def _validate_quantity(validate_manager: SellOfferValidateManager):
         """Checks that the quantity indicated for sale is less than that in the
         inventory + in other sell offers"""
 
-        if not are_there_enough_free_stocks(
-                user=self.user, stock=self.stock,
-                entry_quantity=self.entry_quantity):
+        if not validate_manager.are_there_enough_free_stocks():
             raise serializers.ValidationError(WRONG_QUANTITY_ERROR_MESSAGE)

@@ -4,5 +4,3 @@ from trade.views import TradeViewSet
 
 router = routers.SimpleRouter()
 router.register('', TradeViewSet, basename='trades')
-
-urlpatterns = router.urls

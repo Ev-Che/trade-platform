@@ -31,5 +31,9 @@ class InventoryViewSet(mixins.ListModelMixin,
         return self.serializers.get(self.action)
 
     def get_queryset(self):
-        return Inventory.objects.filter(user=self.request.user).select_related(
-            'stock')
+        queries = {
+            'list': Inventory.objects.filter(
+                user=self.request.user).select_related('stock'),
+            'default': Inventory.objects.filter(user=self.request.user)
+        }
+        return queries.get(self.action, queries['default'])
