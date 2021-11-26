@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 
 from offer.models import Offer, SELL
+from stock_management.models import Stock
 
 User = get_user_model()
 
@@ -18,11 +19,14 @@ class ProfitableOffersFinder:
         the price of which is less than max_price"""
 
         return self._get_sell_offers(exclude_user=self.buy_offer.user,
+                                     stock=self.buy_offer.stock,
                                      max_price=self.buy_offer.price)
 
     @staticmethod
-    def _get_sell_offers(exclude_user: User, max_price: Decimal) -> QuerySet:
+    def _get_sell_offers(exclude_user: User, stock: Stock,
+                         max_price: Decimal) -> QuerySet:
         return (Offer.objects
-                .filter(order_type=SELL, is_active=True, price__lte=max_price)
+                .filter(stock=stock, order_type=SELL, is_active=True,
+                        price__lte=max_price)
                 .exclude(user=exclude_user)
                 .order_by('price'))

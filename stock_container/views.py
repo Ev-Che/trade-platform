@@ -8,7 +8,6 @@ class FavoritesViewSet(mixins.ListModelMixin,
                        mixins.CreateModelMixin,
                        mixins.DestroyModelMixin,
                        viewsets.GenericViewSet):
-
     serializer_class = FavoritesSerializer
 
     def get_queryset(self):
@@ -17,7 +16,6 @@ class FavoritesViewSet(mixins.ListModelMixin,
 
 class InventoryViewSet(mixins.ListModelMixin,
                        viewsets.GenericViewSet):
-
     serializer_class = InventorySerializer
 
     def get_queryset(self):

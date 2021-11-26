@@ -1,6 +1,7 @@
 version: "3.9"
 
 services:
+
   web:
     build: .
     container_name: web_container
@@ -11,7 +12,8 @@ services:
       - "8000:8000"
     depends_on:
       - redis
-  celery:
+
+  celery-worker:
     build: .
     command: celery -A trade_platform worker --loglevel=info
     volumes:
@@ -19,6 +21,17 @@ services:
     depends_on:
       - web
       - redis
+
+  celery-beat:
+    build: .
+    command: celery -A trade_platform beat --loglevel=info
+    volumes:
+      - .:/code
+    depends_on:
+      - web
+      - redis
+      - celery-worker
+
   redis:
     image: redis
 

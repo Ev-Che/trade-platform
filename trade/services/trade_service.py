@@ -47,7 +47,9 @@ class Trader:
 
     @staticmethod
     def _get_random_buy_offer() -> Offer:
-        all_offers = Offer.objects.filter(order_type=BUY, is_active=True)
+        all_offers = Offer.objects.filter(order_type=BUY,
+                                          is_active=True).select_related(
+            'user', 'stock')
 
         return random.choice(tuple(all_offers)) if all_offers else None
 

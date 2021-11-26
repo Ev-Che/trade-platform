@@ -27,6 +27,7 @@ class Inventory(models.Model):
     class Meta:
         verbose_name = 'Inventory'
         verbose_name_plural = 'Inventories'
+        unique_together = ('user', 'stock')
 
     def __str__(self):
         return f'{self.user.username} {self.__class__.__name__}'
