@@ -30,24 +30,27 @@ class MultiSerializerWithPermissionViewSet(viewsets.ModelViewSet):
 
 
 class StockViewSet(MultiSerializerWithPermissionViewSet):
-    queryset = Stock.objects.all()
+    queryset = Stock.objects.all().select_related('price', 'price__currency')
 
     serializers = {
         'list': serializers.ListStockSerializer,
-        'retrieve': serializers.DetailUpdateStockSerializer,
-        'update': serializers.DetailUpdateStockSerializer,
-        'partial_update': serializers.DetailUpdateStockSerializer,
+        'retrieve': serializers.DetailStockSerializer,
+        'create': serializers.CreateUpdateStockSerializer,
+        'update': serializers.CreateUpdateStockSerializer,
+        'partial_update': serializers.CreateUpdateStockSerializer,
         'default': serializers.BaseStockSerializer,
     }
 
 
 class PriceViewSet(MultiSerializerWithPermissionViewSet):
-    queryset = Price.objects.all()
+    queryset = Price.objects.all().select_related('currency')
 
     serializers = {
-        'retrieve': serializers.DetailUpdatePriceSerializer,
-        'update': serializers.DetailUpdatePriceSerializer,
-        'partial_update': serializers.DetailUpdatePriceSerializer,
+        'list': serializers.ListPriceSerializer,
+        'retrieve': serializers.DetailPriceSerializer,
+        'create': serializers.CreateUpdatePriceSerializer,
+        'update': serializers.CreateUpdatePriceSerializer,
+        'partial_update': serializers.CreateUpdatePriceSerializer,
         'default': serializers.BasePriceSerializer,
     }
 
@@ -56,8 +59,10 @@ class CurrencyViewSet(MultiSerializerWithPermissionViewSet):
     queryset = Currency.objects.all()
 
     serializers = {
-        'retrieve': serializers.DetailUpdateCurrencySerializer,
-        'update': serializers.DetailUpdateCurrencySerializer,
-        'partial_update': serializers.DetailUpdateCurrencySerializer,
+        'list': serializers.ListCurrencySerializer,
+        'retrieve': serializers.DetailCurrencySerializer,
+        'create': serializers.CreateUpdateCurrencySerializer,
+        'update': serializers.CreateUpdateCurrencySerializer,
+        'partial_update': serializers.CreateUpdateCurrencySerializer,
         'default': serializers.BaseCurrencySerializer,
     }

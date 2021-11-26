@@ -3,19 +3,19 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Offer
 from .permissions import IsOwner
-from .serializers import BaseOfferSerializer, \
-    CreateUpdateDetailOfferSerializer
+from . import serializers
 
 
 class OfferViewSet(viewsets.ModelViewSet):
-    queryset = Offer.objects.all()
+    queryset = Offer.objects.all().select_related('stock', 'user')
 
     serializers = {
-        'retrieve': CreateUpdateDetailOfferSerializer,
-        'create': CreateUpdateDetailOfferSerializer,
-        'update': CreateUpdateDetailOfferSerializer,
-        'partial_update': CreateUpdateDetailOfferSerializer,
-        'default': BaseOfferSerializer
+        'list': serializers.ListOfferSerializer,
+        'retrieve': serializers.DetailOfferSerializer,
+        'create': serializers.CreateUpdateOfferSerializer,
+        'update': serializers.CreateUpdateOfferSerializer,
+        'partial_update': serializers.CreateUpdateOfferSerializer,
+        'default': serializers.BaseOfferSerializer
     }
 
     permissions = {

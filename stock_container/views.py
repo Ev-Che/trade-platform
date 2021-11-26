@@ -1,22 +1,35 @@
 from rest_framework import viewsets, mixins
 
 from .models import Favorite, Inventory
-from .serializers import FavoritesSerializer, InventorySerializer
+from . import serializers
 
 
 class FavoritesViewSet(mixins.ListModelMixin,
                        mixins.CreateModelMixin,
                        mixins.DestroyModelMixin,
                        viewsets.GenericViewSet):
-    serializer_class = FavoritesSerializer
+    serializers = {
+        'list': serializers.ListFavoritesSerializer,
+        'create': serializers.CreateFavoritesSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializers.get(self.action)
 
     def get_queryset(self):
-        return Favorite.objects.filter(user=self.request.user)
+        return Favorite.objects.filter(user=self.request.user).select_related(
+            'favorite_stock')
 
 
 class InventoryViewSet(mixins.ListModelMixin,
                        viewsets.GenericViewSet):
-    serializer_class = InventorySerializer
+    serializers = {
+        'list': serializers.ListInventorySerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializers.get(self.action)
 
     def get_queryset(self):
-        return Inventory.objects.filter(user=self.request.user)
+        return Inventory.objects.filter(user=self.request.user).select_related(
+            'stock')
