@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from decimal import Decimal
 
 from django.contrib.auth import get_user_model
@@ -9,12 +10,18 @@ from stock_management.models import Stock
 User = get_user_model()
 
 
-class ProfitableOffersFinder:
+class OfferFinder(ABC):
+    @abstractmethod
+    def find_the_most_profitable(self) -> QuerySet:
+        pass
+
+
+class ProfitableOffersFinder(OfferFinder):
 
     def __init__(self, buy_offer: Offer):
         self.buy_offer = buy_offer
 
-    def find_the_most_profitable(self) -> QuerySet:
+    def find_the_most_profitable(self):
         """Returns sell offers except exclude_user offers
         the price of which is less than max_price"""
 

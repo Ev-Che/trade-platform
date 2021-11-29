@@ -14,7 +14,7 @@ from stock_management.models import Currency, Price, Stock
 User = get_user_model()
 
 
-class StockViewSetTestCase(APITestCase):
+class OfferViewSetTestCase(APITestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -38,7 +38,7 @@ class StockViewSetTestCase(APITestCase):
                                           entry_quantity=10, order_type='B',
                                           price=500, is_active=True)
 
-    def test_get_stock_list(self):
+    def test_get_offer_list(self):
         offers_quantity = Offer.objects.all().count()
         url = reverse('offers-list')
         view = OfferViewSet.as_view({'get': 'list'})
@@ -49,7 +49,7 @@ class StockViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), offers_quantity)
 
-    def test_get_stock_list_by_not_auth_user(self):
+    def test_get_offer_list_by_not_auth_user(self):
         url = reverse('offers-list')
         view = OfferViewSet.as_view({'get': 'list'})
         request = self.factory.get(url)
@@ -104,9 +104,9 @@ class StockViewSetTestCase(APITestCase):
                          Offer.objects.all().count())
 
     def test_create_sell_offer(self):
-        user_inventory = Inventory.objects.create(user=self.user,
-                                                  stock=self.stock,
-                                                  quantity=10)
+        Inventory.objects.create(user=self.user,
+                                 stock=self.stock,
+                                 quantity=10)
         offers_quantity_before = Offer.objects.all().count()
         url = reverse('offers-list')
         data = {'stock': self.stock.id, 'entry_quantity': 5,

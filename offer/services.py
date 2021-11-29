@@ -7,31 +7,29 @@ from stock_management.models import Stock
 User = get_user_model()
 
 
-class SellOfferValidateManager:
+class SellOfferManager:
 
-    def __init__(self, user: User, stock: Stock, entry_quantity):
-        self.user = user
-        self.stock = stock
-        self.entry_quantity = entry_quantity
+    @staticmethod
+    def is_inventory_exists(user, stock):
+        return Inventory.objects.filter(user=user, stock=stock).exists()
 
-    def is_inventory_exists(self):
-        return Inventory.objects.filter(user=self.user,
-                                        stock=self.stock).exists()
-
-    def count_stocks_in_sell_offers(self):
+    @staticmethod
+    def count_stocks_in_sell_offers(user: User, stock: Stock):
         stocks_in_different_sell_offers = 0
-        for sell_offer in Offer.objects.filter(user=self.user,
-                                               stock=self.stock,
+        for sell_offer in Offer.objects.filter(user=user,
+                                               stock=stock,
                                                order_type=SELL,
                                                is_active=True):
             stocks_in_different_sell_offers += sell_offer.entry_quantity
 
         return stocks_in_different_sell_offers
 
-    def are_there_enough_free_stocks(self):
-        stocks_in_different_sell_offers = self.count_stocks_in_sell_offers()
+    def are_there_enough_free_stocks(self, user: User, stock: Stock,
+                                     entry_quantity: int):
+        stocks_in_different_sell_offers = self.count_stocks_in_sell_offers(
+            user=user, stock=stock)
         quantity_in_inventory = Inventory.objects.get(
-            user=self.user, stock=self.stock).quantity
+            user=user, stock=stock).quantity
 
-        return self.entry_quantity <= (quantity_in_inventory -
-                                       stocks_in_different_sell_offers)
+        return entry_quantity <= (quantity_in_inventory -
+                                  stocks_in_different_sell_offers)
