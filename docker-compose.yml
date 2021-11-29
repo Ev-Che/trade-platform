@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+
+  web:
+    build: .
+    container_name: web_container
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+
+  celery-worker:
+    build: .
+    command: celery -A trade_platform worker --loglevel=info
+    volumes:
+      - .:/code
+    depends_on:
+      - web
+      - redis
+
+  celery-beat:
+    build: .
+    command: celery -A trade_platform beat --loglevel=info
+    volumes:
+      - .:/code
+    depends_on:
+      - web
+      - redis
+      - celery-worker
+
+  redis:
+    image: redis
+
+#  db:
+#    image: postgres
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#    env_file:
+#      - ./support/.env.db
+#
+#volumes:
+#  postgres_data:

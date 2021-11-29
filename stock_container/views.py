@@ -1,27 +1,39 @@
 from rest_framework import viewsets, mixins
-from rest_framework.permissions import IsAuthenticated
 
 from .models import Favorite, Inventory
-from .serializers import FavoritesSerializer, InventorySerializer
+from . import serializers
 
 
 class FavoritesViewSet(mixins.ListModelMixin,
                        mixins.CreateModelMixin,
                        mixins.DestroyModelMixin,
                        viewsets.GenericViewSet):
+    serializers = {
+        'list': serializers.ListFavoritesSerializer,
+        'create': serializers.CreateFavoritesSerializer,
+    }
 
-    serializer_class = FavoritesSerializer
-    permission_classes = [IsAuthenticated]
+    def get_serializer_class(self):
+        return self.serializers.get(self.action)
 
     def get_queryset(self):
-        return Favorite.objects.filter(user=self.request.user)
+        return Favorite.objects.filter(user=self.request.user).select_related(
+            'favorite_stock')
 
 
 class InventoryViewSet(mixins.ListModelMixin,
                        viewsets.GenericViewSet):
+    serializers = {
+        'list': serializers.ListInventorySerializer,
+    }
 
-    serializer_class = InventorySerializer
-    permission_classes = [IsAuthenticated]
+    def get_serializer_class(self):
+        return self.serializers.get(self.action)
 
     def get_queryset(self):
-        return Inventory.objects.filter(user=self.request.user)
+        queries = {
+            'list': Inventory.objects.filter(
+                user=self.request.user).select_related('stock'),
+            'default': Inventory.objects.filter(user=self.request.user)
+        }
+        return queries.get(self.action, queries['default'])
