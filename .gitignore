@@ -1,0 +1,7 @@
+trade_platform/.env
+trade_platform/.env.db
+db.sqlite3
+.idea/
+__pycache__
+celerybeat-schedule
+.pytest_cache

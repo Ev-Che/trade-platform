@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./trade_platform/.env.db
+    networks:
+      - main
+
+  redis:
+    container_name: redis
+    image: redis
+    networks:
+      - main
+
+  web:
+    build: .
+    container_name: trade_platform
+    command: bash -c "rm -rf celerybeat.pid && python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - main
+
+  celery_worker:
+    build: .
+    command: sh -c "celery -A trade_platform worker -l info"
+    container_name: celery_worker
+    depends_on:
+      - web
+      - redis
+      - db
+    networks:
+      - main
+
+  celery_beat:
+    build: .
+    command: sh -c "celery -A trade_platform beat -l info"
+    container_name: celery_beat
+    depends_on:
+      - web
+      - redis
+      - db
+    networks:
+      - main
+
+networks:
+  main:
+
+volumes:
+  postgres_data:

@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+flake8 = "*"
+djoser = "*"
+psycopg2-binary = "*"
+django-environ = "*"
+pytest = "*"
+celery = "==4.4.7"
+redis = "*"
+loguru = "*"
+kafka-python = "*"
+django-extensions = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
