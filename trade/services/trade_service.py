@@ -1,4 +1,5 @@
 import random
+from typing import Union
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,10 +16,11 @@ User = get_user_model()
 
 class Trader:
 
-    def make_a_trade(self) -> None:
+    def make_a_trade(self) -> Union[None, list]:
         """Creates Trades."""
 
         buy_offer = self._get_random_buy_offer()
+        seller_emails = []
         logger.debug(f'buy offer: {buy_offer}')
 
         if buy_offer is not None:
@@ -28,8 +30,32 @@ class Trader:
 
             for sell_offer in most_profitable:
                 self._deal(buy_offer=buy_offer, sell_offer=sell_offer)
+                email = sell_offer.user.email
+                if email:
+                    seller_emails.append(email)
+
                 if not buy_offer.is_active:
                     break
+
+            if most_profitable:
+                recipients = self._create_emails_list(
+                        buyer_email=buy_offer.user.email,
+                        seller_emails=seller_emails)
+                return recipients
+
+    @staticmethod
+    def _create_emails_list(buyer_email: Union[str, None],
+                            seller_emails: list):
+        """Creates list with buyer and seller emails"""
+
+        emails = []
+        if buyer_email:
+            emails.append(buyer_email)
+
+        if seller_emails:
+            emails.extend(seller_emails)
+
+        return emails if emails else None
 
     def _deal(self, buy_offer: Offer, sell_offer: Offer) -> None:
         """Creates a Trade between buy_offer and sell_offer.

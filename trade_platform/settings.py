@@ -74,9 +74,18 @@ WSGI_APPLICATION = 'trade_platform.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env.str('SQL_DATABASE'),
+        'USER': env.str('SQL_USER'),
+        'PASSWORD': env.str('SQL_PASSWORD'),
+        'HOST': env.str('SQL_HOST'),
+        'PORT': env.int('SQL_PORT'),
     }
 }
 

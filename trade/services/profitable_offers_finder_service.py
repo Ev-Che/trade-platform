@@ -36,4 +36,4 @@ class ProfitableOffersFinder(OfferFinder):
                 .filter(stock=stock, order_type=SELL, is_active=True,
                         price__lte=max_price)
                 .exclude(user=exclude_user)
-                .order_by('price'))
+                .order_by('price')).select_related('user')
